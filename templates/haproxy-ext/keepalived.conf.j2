@@ -1,0 +1,28 @@
+vrrp_script chk_haproxy {
+    script "killall -0 haproxy"   # Check if HAProxy process is running
+    interval 2                    # Check every 2 seconds
+    weight 2                      # Weight to influence master election
+}
+
+vrrp_instance VI_1 {
+{% if inventory_hostname == "haproxy-ext-1"  %}
+    state MASTER
+    priority 100                # Higher priority on the primary server
+{% elif inventory_hostname == "haproxy-ext-2" %}
+    state BACKUP
+    priority 50                 # Higher priority on the primary server   
+{% endif %} 
+    interface eth1                 # Network interface to bind to
+    virtual_router_id 1                 
+    advert_int 2
+    authentication {
+        auth_type PASS
+        auth_pass OtusHL24     # Set a strong authentication password
+    }
+    virtual_ipaddress {
+        192.168.30.130              # Your VIP address
+    }
+    track_script {
+        chk_haproxy
+    }
+}
