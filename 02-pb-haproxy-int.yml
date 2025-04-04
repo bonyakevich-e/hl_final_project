@@ -1,35 +1,8 @@
 - name: Initial configuration
   tags: initial configuration
-  hosts: haproxy-ext-1, haproxy-ext-2
+  hosts: haproxy-int-1, haproxy-int-2
   become: true
   tasks:
-    - name: disable default route
-      tags: change def route
-      ansible.builtin.template:
-        src: templates/haproxy-ext/01-netcfg.yaml
-        dest: /etc/netplan/01-netcfg.yaml
-        owner: root
-        group: root
-        mode: 0600
-      notify: netplan apply
-
-    - name: add static routers to hosts
-      tags: change def route
-      ansible.builtin.template:
-        src: templates/haproxy-ext/50-vagrant.yaml.j2
-        dest: /etc/netplan/50-vagrant.yaml
-        owner: root
-        group: root
-        mode: 0600
-      notify: netplan apply
-
-    - name: remove 50-cloud-init.yaml
-      tags: change def route
-      ansible.builtin.file:
-        path: /etc/netplan/50-cloud-init.yaml
-        state: absent
-      notify: netplan apply
-
     - name: Add lines to /etc/hosts
       tags: setup hosts
       ansible.builtin.blockinfile:
@@ -60,15 +33,11 @@
     - name: Turning "set-ntp" on
       command: /usr/bin/timedatectl set-ntp on
 
-  handlers:
-    - name: netplan apply
-      command: netplan apply
-
 # ========================================
 
 - name: Set up haproxy and keepalived
-  tags: setup balancer
-  hosts: haproxy-ext-1, haproxy-ext-2
+  tags: setup haproxy-int
+  hosts: haproxy-int-1, haproxy-int-2
   become: true
   tasks:
     - name: Install haproxy
@@ -85,26 +54,14 @@
         state: present
         update_cache: yes
 
-    - name: Copy haproxy config
-      tags: copy haproxy config
-      ansible.builtin.template:
-        src: templates/haproxy-ext/haproxy.cfg
-        dest: /etc/haproxy/haproxy.cfg
-      notify: restart haproxy
-
     - name: Copy keepalived config
       tags: copy keepalived config
       ansible.builtin.template:
-        src: templates/haproxy-ext/keepalived.conf.j2
+        src: templates/haproxy-int/keepalived.conf.j2
         dest: /etc/keepalived/keepalived.conf
       notify: restart keepalived
 
   handlers:
-    - name: restart haproxy
-      ansible.builtin.service:
-        name: haproxy
-        state: restarted
-
     - name: restart keepalived
       ansible.builtin.service:
         name: keepalived

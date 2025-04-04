@@ -21,9 +21,14 @@ Vagrant.configure("2") do |config|
       haproxyext2.vm.network "private_network", ip: "192.168.56.11"
    end
 
-   config.vm.define "backend" do |backend|
-      backend.vm.host_name = "backend"
-      backend.vm.network "private_network", ip: "192.168.56.12"
+   config.vm.define "haproxy-int-1" do |haproxyint1|
+      haproxyint1.vm.host_name = "haproxy-int-1"
+      haproxyint1.vm.network "private_network", ip: "192.168.56.21"
+   end      
+
+   config.vm.define "haproxy-int-2" do |haproxyint2|
+      haproxyint2.vm.host_name = "haproxy-int-2"
+      haproxyint2.vm.network "private_network", ip: "192.168.56.22"
    end
 
 #   config.vm.define "control1" do |control1|
