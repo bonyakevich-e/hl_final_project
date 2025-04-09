@@ -15,3 +15,8 @@ control-3 ansible_host=192.168.56.33 ansible_user=vagrant ansible_ssh_private_ke
 node-1 ansible_host=192.168.56.41 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-1/virtualbox/private_key
 node-2 ansible_host=192.168.56.42 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-2/virtualbox/private_key
 node-3 ansible_host=192.168.56.43 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-3/virtualbox/private_key
+
+[databases]
+database-1 ansible_host=192.168.56.51 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/database-1/virtualbox/private_key
+database-2 ansible_host=192.168.56.52 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/database-2/virtualbox/private_key
+database-3 ansible_host=192.168.56.53 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/database-3/virtualbox/private_key

@@ -88,14 +88,31 @@ Vagrant.configure("2") do |config|
       end
    end
 
-#   config.vm.define "storage" do |storage|
-#      storage.vm.host_name = "storage"
-#      storage.vm.network "public_network", ip: "192.168.30.12", bridge: "eno1"
-#      storage.vm.disk :disk, size: "50GB", primary: true
-#      storage.vm.provider "virtualbox" do |v| 
-#         v.memory = 2048 
-#         v.cpus = 1
-#      end
-#   end
- 
+   config.vm.define "database-1" do |database1|
+      database1.vm.host_name = "database-1"
+      database1.vm.network "private_network", ip: "192.168.56.51"
+      database1.vm.provider "virtualbox" do |v| 
+         v.memory = 4096
+         v.cpus = 2
+      end
+   end
+
+   config.vm.define "database-2" do |database2|
+      database2.vm.host_name = "database-2"
+      database2.vm.network "private_network", ip: "192.168.56.52"
+      database2.vm.provider "virtualbox" do |v| 
+         v.memory = 4096 
+         v.cpus = 2
+      end
+   end
+
+   config.vm.define "database-3" do |database3|
+      database3.vm.host_name = "database-3"
+      database3.vm.network "private_network", ip: "192.168.56.53"
+      database3.vm.provider "virtualbox" do |v| 
+         v.memory = 4096 
+         v.cpus = 2
+      end
+   end
+
 end

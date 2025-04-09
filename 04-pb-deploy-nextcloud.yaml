@@ -1,0 +1,26 @@
+- name: Deploy Nextcloud
+  tags: deploy nextcloud
+  hosts: control-1
+  become: true
+  tasks:
+    - name: Add Nextcloud helm repo
+      tags: add nextcloud repo
+      kubernetes.core.helm_repository:
+        name: longhorn
+        repo_url: "https://nextcloud.github.io/helm/"
+      ignore_errors: true
+
+    - name: Deploy Nextcloud chart using values files
+      tags: deploy nextcloud
+      kubernetes.core.helm:
+        name: nextcloud
+        chart_ref: nextcloud/nextcloud
+        release_namespace: nextcloud
+        create_namespace: true
+        update_repo_cache: true
+        values_files:
+          - /vagrant/kubernetes/values-nextcloud.yaml
+
+    - name: wait 30 seconds while creating ingress-nginx service
+      ansible.builtin.wait_for:
+        timeout: 30
