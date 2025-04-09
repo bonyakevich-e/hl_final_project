@@ -9,17 +9,17 @@ Vagrant.configure("2") do |config|
          v.cpus = 1 
       end  
 
-   config.vm.define "haproxy-ext-1" do |haproxyext1|
-      haproxyext1.vm.host_name = "haproxy-ext-1"
-      haproxyext1.vm.network "public_network", ip: "192.168.30.131", bridge: "eno1"
-      haproxyext1.vm.network "private_network", ip: "192.168.56.10"
-   end      
+#   config.vm.define "haproxy-ext-1" do |haproxyext1|
+#      haproxyext1.vm.host_name = "haproxy-ext-1"
+#      haproxyext1.vm.network "public_network", ip: "192.168.30.131", bridge: "eno1"
+#      haproxyext1.vm.network "private_network", ip: "192.168.56.10"
+#   end      
 
-   config.vm.define "haproxy-ext-2" do |haproxyext2|
-      haproxyext2.vm.host_name = "haproxy-ext-2"
-      haproxyext2.vm.network "public_network", ip: "192.168.30.132", bridge: "eno1"
-      haproxyext2.vm.network "private_network", ip: "192.168.56.11"
-   end
+#   config.vm.define "haproxy-ext-2" do |haproxyext2|
+#      haproxyext2.vm.host_name = "haproxy-ext-2"
+#      haproxyext2.vm.network "public_network", ip: "192.168.30.132", bridge: "eno1"
+#      haproxyext2.vm.network "private_network", ip: "192.168.56.11"
+#   end
 
    config.vm.define "haproxy-int-1" do |haproxyint1|
       haproxyint1.vm.host_name = "haproxy-int-1"
@@ -31,47 +31,62 @@ Vagrant.configure("2") do |config|
       haproxyint2.vm.network "private_network", ip: "192.168.56.22"
    end
 
-#   config.vm.define "control1" do |control1|
-#      control1.vm.host_name = "control1"
-#      control1.vm.network "public_network", ip: "192.168.30.14", bridge: "eno1"
-#   end
+   config.vm.define "control-1" do |control1|
+      control1.vm.host_name = "control-1"
+      control1.vm.network "private_network", ip: "192.168.56.31"
+      control1.vm.provider "virtualbox" do |v| 
+         v.memory = 4096 
+         v.cpus = 2
+      end
+   end
  
-#   config.vm.define "control2" do |control2|
-#      control2.vm.host_name = "control2"
-#      control2.vm.network "public_network", ip: "192.168.30.15", bridge: "eno1"
-#   end
+   config.vm.define "control-2" do |control2|
+      control2.vm.host_name = "control-2"
+      control2.vm.network "private_network", ip: "192.168.56.32"
+      control2.vm.provider "virtualbox" do |v| 
+         v.memory = 4096 
+         v.cpus = 2
+      end
+   end
  
-#   config.vm.define "control3" do |control3|
-#      control3.vm.host_name = "control3"
-#      control3.vm.network "public_network", ip: "192.168.30.16", bridge: "eno1"
-#   end
+   config.vm.define "control-3" do |control3|
+      control3.vm.host_name = "control-3"
+      control3.vm.network "private_network", ip: "192.168.56.33"
+      control3.vm.provider "virtualbox" do |v| 
+         v.memory = 4096 
+         v.cpus = 2
+      end
+   end
  
-#   config.vm.define "node1" do |node1|
-#      node1.vm.host_name = "node1"
-#      node1.vm.network "public_network", ip: "192.168.30.17", bridge: "eno1"
-#      node1.vm.provider "virtualbox" do |v| 
-#         v.memory = 4096 
-#         v.cpus = 2
-#      end
-#   end
+   config.vm.define "node-1" do |node1|
+      node1.vm.host_name = "node-1"
+      node1.vm.network "private_network", ip: "192.168.56.41"
+      node1.vm.disk :disk, name: "storage", size: "50GB"
+      node1.vm.provider "virtualbox" do |v| 
+         v.memory = 8192 
+         v.cpus = 4
+      end
+   end
 
-#   config.vm.define "node2" do |node2|
-#      node2.vm.host_name = "node2"
-#      node2.vm.network "public_network", ip: "192.168.30.18", bridge: "eno1"
-#      node2.vm.provider "virtualbox" do |v| 
-#         v.memory = 4096 
-#         v.cpus = 2
-#      end
-#   end
+   config.vm.define "node-2" do |node2|
+      node2.vm.host_name = "node-2"
+      node2.vm.network "private_network", ip: "192.168.56.42"
+      node2.vm.disk :disk, name: "storage", size: "50GB"
+      node2.vm.provider "virtualbox" do |v| 
+         v.memory = 8192 
+         v.cpus = 4
+      end
+   end
 
-#   config.vm.define "node3" do |node3|
-#      node3.vm.host_name = "node3"
-#      node3.vm.network "public_network", ip: "192.168.30.11", bridge: "eno1"
-#      node3.vm.provider "virtualbox" do |v| 
-#         v.memory = 4096 
-#         v.cpus = 2
-#      end
-#   end
+   config.vm.define "node-3" do |node3|
+      node3.vm.host_name = "node-3"
+      node3.vm.network "private_network", ip: "192.168.56.43"
+      node3.vm.disk :disk, name: "storage", size: "50GB"
+      node3.vm.provider "virtualbox" do |v| 
+         v.memory = 8192 
+         v.cpus = 4
+      end
+   end
 
 #   config.vm.define "storage" do |storage|
 #      storage.vm.host_name = "storage"
@@ -83,4 +98,4 @@ Vagrant.configure("2") do |config|
 #      end
 #   end
  
- end
+end

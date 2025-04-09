@@ -5,3 +5,13 @@ haproxy-ext-2 ansible_host=192.168.56.11 ansible_user=vagrant ansible_ssh_privat
 [haproxy-int]
 haproxy-int-1 ansible_host=192.168.56.21 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/haproxy-int-1/virtualbox/private_key
 haproxy-int-2 ansible_host=192.168.56.22 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/haproxy-int-2/virtualbox/private_key
+
+[controls]
+control-1 ansible_host=192.168.56.31 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/control-1/virtualbox/private_key
+control-2 ansible_host=192.168.56.32 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/control-2/virtualbox/private_key
+control-3 ansible_host=192.168.56.33 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/control-3/virtualbox/private_key
+
+[workers]
+node-1 ansible_host=192.168.56.41 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-1/virtualbox/private_key
+node-2 ansible_host=192.168.56.42 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-2/virtualbox/private_key
+node-3 ansible_host=192.168.56.43 ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/node-3/virtualbox/private_key

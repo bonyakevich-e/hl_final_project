@@ -1,8 +1,11 @@
 - name: Initial configuration
   tags: initial configuration
-  hosts: haproxy-int-1, haproxy-int-2
+  hosts: haproxy-int
   become: true
   tasks:
+    - name: Check host availability
+      ansible.builtin.ping:
+
     - name: Add lines to /etc/hosts
       tags: setup hosts
       ansible.builtin.blockinfile:
@@ -13,6 +16,12 @@
           192.168.56.20 haproxy-int
           192.168.56.21 haproxy-int-1
           192.168.56.22 haproxy-int-2
+          192.168.56.31 control-1
+          192.168.56.32 control-2
+          192.168.56.33 control-3
+          192.168.56.41 node-1
+          192.168.56.42 node-2
+          192.168.56.43 node-3
         state: present
 
     - name: Disable ufw service
@@ -37,7 +46,7 @@
 
 - name: Set up haproxy and keepalived
   tags: setup haproxy-int
-  hosts: haproxy-int-1, haproxy-int-2
+  hosts: haproxy-int
   become: true
   tasks:
     - name: Install haproxy
@@ -46,6 +55,13 @@
         name: haproxy
         state: present
         update_cache: yes
+
+    - name: Copy haproxy config
+      tags: copy haproxy config
+      ansible.builtin.template:
+        src: templates/haproxy-int/haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+      notify: restart haproxy
 
     - name: Install keepalived
       tags: install keepalived
@@ -62,6 +78,11 @@
       notify: restart keepalived
 
   handlers:
+    - name: restart haproxy
+      ansible.builtin.service:
+        name: haproxy
+        state: restarted
+
     - name: restart keepalived
       ansible.builtin.service:
         name: keepalived

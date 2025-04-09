@@ -1,6 +1,6 @@
 - name: Initial configuration
   tags: initial configuration
-  hosts: haproxy-ext-1, haproxy-ext-2
+  hosts: haproxy-ext
   become: true
   tasks:
     - name: disable default route
@@ -40,6 +40,12 @@
           192.168.56.20 haproxy-int
           192.168.56.21 haproxy-int-1
           192.168.56.22 haproxy-int-2
+          192.168.56.31 control-1
+          192.168.56.32 control-2
+          192.168.56.33 control-3
+          192.168.56.41 node-1
+          192.168.56.42 node-2
+          192.168.56.43 node-3
         state: present
 
     - name: Disable ufw service
@@ -68,7 +74,7 @@
 
 - name: Set up haproxy and keepalived
   tags: setup balancer
-  hosts: haproxy-ext-1, haproxy-ext-2
+  hosts: haproxy-ext
   become: true
   tasks:
     - name: Install haproxy
