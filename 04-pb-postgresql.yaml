@@ -1,0 +1,209 @@
+- name: Hosts initialization
+  tags: hosts initialization
+  hosts: databases
+  become: true
+  tasks:
+    - name: Wait for system to become reachable
+      ansible.builtin.wait_for_connection:
+
+    - name: Add lines to /etc/hosts
+      tags: setup hosts
+      ansible.builtin.blockinfile:
+        dest: /etc/hosts
+        block: |
+          192.168.56.10 haproxy-ext-1
+          192.168.56.11 haproxy-ext-2
+          192.168.56.20 haproxy-int
+          192.168.56.21 haproxy-int-1
+          192.168.56.22 haproxy-int-2
+          192.168.56.31 control-1
+          192.168.56.32 control-2
+          192.168.56.33 control-3
+          192.168.56.41 node-1
+          192.168.56.42 node-2
+          192.168.56.43 node-3
+          192.168.56.51 database-1
+          192.168.56.51 database-2
+          192.168.56.51 database-3
+        state: present
+
+    - name: Disable ufw service
+      ansible.builtin.service:
+        name: ufw
+        state: stopped
+        enabled: false
+
+    - name: Set timezone
+      community.general.timezone:
+        name: Europe/Moscow
+
+    - name: Uninstall 'ntp' package
+      ansible.builtin.apt:
+        name: ntp
+        state: absent
+
+    - name: Turning "set-ntp" on
+      command: /usr/bin/timedatectl set-ntp on
+
+# =============================== setup etcd =================================
+
+- name: Setup etcd
+  tags: setup etcd
+  hosts: databases
+  become: true
+  tasks:
+    - name: Update apt cache
+      tags: update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+
+    - name: Install etcd
+      tags: install etcd
+      ansible.builtin.unarchive:
+        src: https://cloud.baltbereg.com/index.php/s/nTHrb3ABA9YbxtS/download/etcd-v3.5.18-linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Copy etcd binaries to /usr/local/bin
+      ansible.builtin.copy:
+        src: "/tmp/etcd-v3.5.18-linux-amd64/{{ item }}"
+        dest: /usr/local/bin
+        remote_src: yes
+        mode: "0755"
+      with_items:
+        - etcd
+        - etcdctl
+        - etcdutl
+
+    - name: Create etcd system group
+      tags: create etcd system group
+      ansible.builtin.group:
+        name: etcd
+        state: present
+        system: yes
+
+    - name: Create etcd user
+      tags: create etcd user
+      ansible.builtin.user:
+        name: etcd
+        group: etcd
+        system: yes
+        shell: /sbin/nologin
+
+    - name: Create /var/lib/etcd/
+      tags: create /var/lib/etcd/
+      ansible.builtin.file:
+        path: /var/lib/etcd/
+        state: directory
+        owner: etcd
+        group: etcd
+        mode: "0755"
+
+    - name: Create /etc/etcd
+      ansible.builtin.file:
+        path: /etc/etcd
+        state: directory
+
+    - name: Copy systemd unit etcd.service
+      ansible.builtin.copy:
+        src: templates/etcd/etcd.service
+        dest: /etc/systemd/system/etcd.service
+
+    - name: Copy etcd config
+      tags: copy etcd config
+      ansible.builtin.template:
+        src: templates/etcd/etcd.conf_{{ inventory_hostname }}.tmpl
+        dest: /etc/etcd/etcd.conf
+
+    - name: Start etcd
+      tags: start etcd
+      ansible.builtin.service:
+        name: etcd
+        state: restarted
+        enabled: yes
+
+# ============================ setup database ===================
+
+- name: Setup PostgreSQL
+  tags: setup postgresql
+  hosts: databases
+  become: true
+  tasks:
+    - name: Generate an OpenSSH keypair with the default values (4096 bits, rsa)
+      community.crypto.openssh_keypair:
+        path: /root/.ssh/id_rsa
+
+    - name: Install additional packages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      with_items:
+        - python3-pip
+        - python3-dev
+        - libpq-dev
+
+    - name: Install PostgreSQL
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - postgresql
+        - postgresql-contrib
+        - postgresql-client-16
+        - postgresql-server-dev-16
+
+    - name: Install Patroni
+      tags: install patroni
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        break_system_packages: true
+      with_items:
+        - patroni
+        - python-etcd
+        - psycopg2
+
+    - name: Disable postgresql autorun (it will be made by patroni)
+      tags: disable postgresql
+      ansible.builtin.service:
+        name: postgresql
+        state: stopped
+        enabled: no
+
+    - name: Remove initial config, that was created by postgresql
+      tags: remove initial config
+      ansible.builtin.file:
+        path: /var/lib/postgresql/16/main
+        state: absent
+
+    - name: Create patroni config directory
+      tags: create patroni config directory
+      ansible.builtin.file:
+        path: /etc/patroni
+        state: directory
+        owner: postgres
+        group: postgres
+        mode: "0755"
+
+    - name: Copy patroni service file
+      tags: copy patroni service file
+      ansible.builtin.copy:
+        src: templates/postgresql/patroni.service
+        dest: /etc/systemd/system/patroni.service
+
+    - name: Copy patroni configuration
+      tags: copy patroni config
+      ansible.builtin.copy:
+        src: templates/postgresql/patroni.yml_{{inventory_hostname}}.tmpl
+        dest: /etc/patroni/patroni.yml
+        owner: postgres
+        group: postgres
+        mode: "0755"
+
+    - name: Start and enable patroni
+      tags: start patroni
+      ansible.builtin.service:
+        name: patroni
+        state: started
+        enabled: yes

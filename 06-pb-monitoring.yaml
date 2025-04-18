@@ -1,0 +1,32 @@
+- name: Setup monitoring
+  tags: setup monitoring
+  hosts: control-1
+  become: true
+  tasks:
+    - name: Create database for grafana
+      tags: create database for grafana
+      ansible.builtin.shell: "PGPASSWORD=OtusHL psql -Upostgres -h192.168.56.20 -p5000 < /vagrant/templates/postgresql/grafana.sql"
+
+    - name: Add prometheus-community helm repo
+      tags: add prometheus-community repo
+      kubernetes.core.helm_repository:
+        name: prometheus-community
+        repo_url: "https://prometheus-community.github.io/helm-charts"
+      ignore_errors: true
+
+    - name: Deploy kube-prometheus-stack
+      tags: deploy kube-prometheus-stack
+      kubernetes.core.helm:
+        name: kube-prometheus-stack
+        chart_ref: /vagrant/kube-prometheus-stack
+        release_namespace: monitoring
+        create_namespace: true
+        update_repo_cache: true
+        values_files:
+          - /vagrant/kubernetes/values-prometheus.yaml
+#    - name: Add Loki help repo
+#      tags: add loki repo
+#      kubernetes.core.helm_repository:
+#        name: grafana
+#        repo_url: "https://grafana.github.io/helm-charts"
+#      ignore_errors: true

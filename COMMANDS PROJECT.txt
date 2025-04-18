@@ -1,0 +1,3 @@
+helm upgrade --reuse-values -n monitoring -f /vagrant/kubernetes/values-prometheus.yaml kube-prometheus-stack /vagrant/kube-prometheus-stack
+helm install -n monitoring -f /vagrant/kubernetes/values-prometheus.yaml kube-prometheus-stack /vagrant/kube-prometheus-stack
+helm uninstall kube-prometheus-stack -n monitoring

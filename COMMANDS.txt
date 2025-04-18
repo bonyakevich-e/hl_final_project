@@ -1,0 +1,119 @@
+
+other: 
+kubectl config view - посмотреть конфигурацию kubectl (к какому кластеру ссылается)
+kubectl apply -f pod-myweb-ver1.yaml - запустить манифест
+kubectl rollout undo deployment/denis-deployment - откатиться к предыдущей версии деплоймента
+kubectl rollout undo deployment/denis-deploymen --to-revision=4 - откатиться к версии 4
+kubectl drain ИМЯ_НОДЫ --ignore-daemonsets - освободить ноду от подов (то есть все поды перезжают на другие ноды, кроме DaemonSets)
+kubectl uncordon ИМЯ_НОДЫ - когда мы делаем drain, то планировщик перестаёт размещать на этой ноде что-либо. Эта комманда отключает это, то есть разрешает размещать что-либо на ноде
+kubeadm certs check-expiration - посмотреть список сертификатов и их срок действия
+kubectl describe secret admin-user -n kube-system - посмотреть токен для сервис аккаунта admin-user
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443 --address=0.0.0.0 - пробросить порт для dashboard
+kubectl delete -f /etc/kubernetes/dashboard - удалить все сущности, описанные в yaml-файл. Обычно необходмый деплоймент и всё что с ним связано описывается
+одним yaml-файлом. Таким образом мы может удалить сам дейплоймент и то что с ним связано.
+
+monitoring:
+kubectl get nodes
+kubectl get podes
+kubectl get pods -o wide - показать дополнительно ip адреса подов
+kubectl get podes -A - посмотреть поды во всех namespace'ах
+kubectl get deploy
+kubectl get rs - показывает объекты ReplicaSet (создаются при скейлинге деплоймента)
+kubectl get hpa - показывает объекты horizontalautoscaler (которые создаются при аутоскейлинге)
+kubectl rollout history deployment/denis-deployment - показать историю по деплойменту
+kubectl rollout status deployment/denis-deployment - показать текущее состояние деплоймента
+kubectl get services (или svc)
+kubectl get ingress - посмотреть правила ingress контроллера
+kubectl cluste-info - информация по кластеру
+kubeadm token list - список активных токенов 
+kubectl get namespace - список неймспейсов
+kubectl -n kubernetes-dashboard get all - показать все сущности в неймспейсе kubernetes-dashboard
+kubectl top pods - работает когда установлен metrics-server
+kubectl top nodes - работает когда установлен metrics-server
+kubectl -n nextcloud get pods nextcloud-7fc48d5546-jm8ps -o json - инфа по поду, в том числе там есть количество контейнеров в поде и их статус
+
+debug:
+kubectl -n nextcloud debug nextcloud-7fc48d5546-jm8ps -it --image=busybox - запускает debug-контейнер в указаном поде (рядом с нашей приложухой) и коннектит к нему
+
+pods:
+kubectl get podes
+kubectl get pods --namespace=<insert-namespace-name-here>
+kubectl run hello --generator=run-pod/v1 --image=adv4000/k8sphp:latest --port=80 - создать pod с именем hello с указанным контейнером и открыть к нему порт 80
+kubectl delete pods hello - удалить pod helloав 
+kubectl describe pods hello - показать инфу по поду. В том числе можно посмотреть на какой ноде запущен этот под. Кластерный ip адрес
+kubectl exec hello date - запустить команду на поде
+kubectl exec -it hello sh - запустить команду на поде в интерактивном режиме 
+kubectl exec --stdin --tty boardmaps-web-69fd45b565-5t6nw -- /bin/sh -  подключится к поду
+kubectl logs hello - посмотреть логи с пода
+kubectl port-forward hello 7788:80 - сделать проброс порта с хоста 7788 на под порт 80. Интерактивно
+
+deployments:
+kubectl get deploy
+kubectl create deployment denis-deployment --image adv4000/k8sphp:latest
+kubectl set image deployment/denis-deployment k8sphp=adv4000/k8sphp:version1 --record - обновить контейнер в деплойменте
+kubectl rollout restart deployment/denis-deployment - рестартит/ или заново деплоит текущуюю версию (имеется ввиду если у нас обновилась версия latest и нам нужно её обновить в поде)
+kubectl describe deployment denis-deployment
+kubectl scale deployment denis-deployment --replicas 4 - создать четыре реплики деплоймента
+kubectl autoscale deployment denis-deployment --min=4 --max=6 --cpu-percent=80 - создаёт объект horizontalautoscaler (hpa). Создаться сначала четры пода, а если будет не хватать ресурсов - будут создаваться дополнительные поды, но максимум 6 
+kubectl rollout history deployment/denis-deployment - показать историю по деплойменту
+kubectl rollout status deployment/denis-deployment - показать текущее состояние деплоймента
+kubectl delete -f deployment-1-simple.yaml - удалить деплоймент, который был создан из файла
+
+services:
+параметры:
+	ClusterIP - приложение будет доступно только внутри кластера (default)
+	NodePort - получаем определённый порт и на всех воркерах приложение будет доступно по этому порту (воркернод:порт)
+	ExternalName - DNS CNAME Record
+	LoadBalancer - только в Loud Cluster, за деньги
+kubectl expose deployment denis-deployment --type=ClusterIP --port 8080 --target-port 80 - создать сервис (порт 8080 редиректится на порт 80 всех подов в деплойменте)
+kubectl get services (или svc)
+kubectl delete service denis-deployment
+
+ingress controller:
+kubectl get ingress
+
+helm:
+helm list - lists all of the releases for a specified namespace
+helm uninstall <boardmaps> - uninstall a release
+helm pull boardmaps/boardmaps --untar - download and unarchive helm chart in local directory
+helm upgrade --reuse-values -f values.yml boardmaps boardmaps/boardmaps
+
+
+
+POSTGRESQL:
+\c database_name; \dt - посмотреть список таблиц
+
+Пересоздание базы данных:
+drop database grafana;
+CREATE USER grafana WITH PASSWORD 'OtusHL' CREATEDB;
+CREATE DATABASE grafana TEMPLATE template0 ENCODING 'UTF8';
+ALTER DATABASE grafana OWNER TO grafana;
+GRANT ALL PRIVILEGES ON DATABASE grafana TO grafana;
+GRANT ALL PRIVILEGES ON SCHEMA public TO grafana;
+
+
+patronictl -c /etc/patroni/patroni.yml list - состояние postregsql кластера
+patronictl -c /etc/patroni.yml reinit postgres <node-name> - рециинилизация ноды
+patronictl -c /etc/patroni.yml failover postgres --candidate <node-name> - ручной фейловер
+
+etcdctl member list - состояние etcd кластера
+
+После установки postgresql он автоматически запускается. Нам это не нужно, потому что запуском и настройкой postersql будет заниматься patroni. Поэтому мы 
+деактивируем postgresql и удаляем файлы, которые он создал при первом запуске. А после настраиваем и поднимаем patroni (см. плейбук)
+
+проверить подключение к БД через haproxy из backendа:
+psql -Upostgres -hlocalhost -p5000 -t -c "select inet_server_addr()"
+
+удалить базу и пользователя nextcloud:
+DROP database nextcloud;
+DROP OWNED by nextcloud;
+DROP USER nextcloud;
+
+удаленное подключение к postgre:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000
+
+удаленный запуск команд с .sql файла:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000 < nextcloud.sql
+
+удаленный запуск команд:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000 -c "DROP DATABASE nextcloud"

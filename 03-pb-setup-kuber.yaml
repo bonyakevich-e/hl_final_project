@@ -107,6 +107,7 @@
           - software-properties-common
           - containerd.io
           - nfs-common
+          - postgresql-client
         state: present
         update_cache: yes
 
