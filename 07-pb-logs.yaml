@@ -1,0 +1,31 @@
+- name: Setup logs aggregation
+  tags: setup logs aggregation
+  hosts: control-1
+  become: true
+  tasks:
+    - name: Add loki repo
+      tags: add loki repo
+      kubernetes.core.helm_repository:
+        name: grafana
+        repo_url: "https://grafana.github.io/helm-charts"
+      ignore_errors: true
+
+    - name: Deploy Loki
+      tags: deploy loki
+      kubernetes.core.helm:
+        name: loki
+        chart_ref: grafana/loki
+        release_namespace: monitoring
+        update_repo_cache: true
+        values_files:
+          - /vagrant/kubernetes/values-loki.yaml
+
+    - name: Deploy k8s-monitoring
+      tags: deploy k8s-monitoring
+      kubernetes.core.helm:
+        name: k8s-monitoring
+        chart_ref: grafana/k8s-monitoring
+        release_namespace: monitoring
+        update_repo_cache: true
+        values_files:
+          - /vagrant/kubernetes/values-k8s-monitoring.yaml

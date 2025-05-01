@@ -1,0 +1,35 @@
+Основная статья по сбору логов в Kubernetes при помощи Loki - https://grafana.com/docs/loki/latest/send-data/k8s-monitoring-helm/
+
+Loki logging stack включает в себя:
+1. Agent - An agent or client, for example Grafana Alloy, or Promtail, which is distributed with Loki. The agent scrapes logs, turns the logs into streams by adding labels, and pushes the streams to Loki through an HTTP API.
+2. Loki - The main server, responsible for ingesting and storing logs and processing queries. 
+3. Grafana for querying and displaying log data. You can also query logs from the command line, using LogCLI or using the Loki API directly.
+
+Для запроса логов используется язык LogQL.
+
+Компоненты Loki: https://grafana.com/docs/loki/latest/get-started/components/#loki-components
+
+Я разворачивал Loki в Simple Scalable Mode: https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable
+Разворачиваются следующие сущности:
+- loki-gateway (Deployment) - 2 replicas. Это reverse proxy на nginx, который перенаправляет запросы на read или write nodes.
+- loki-read (Deployment) - 3 replicas. Обрабатывает запросы на чтение
+- loki-backend (Stateful Set) - 3 replicas. 
+- loki-results-cache (Stateful Set) - 1 replicas - используется для in-memory caching. Нужно две реплики?
+- loki-write (Stateful Set) - 3 replicas. Обрабатывает запросы на запись
+- loki-canary (Daemon Set). Приложение предназначенное для проверки производительности Loki. Периодически генерирует логи и отправляет их в Loki (через Alloy и напряму, сравниваем время записи и т.п). Потом считывает эти же логи. Итоговые данные доступны в Prometheus-like виде, то есть можем их считывать системой мониторинга
+
+Для сбора логов также запускается:
+- k8s-monitoring-alloy-logs (Daemon Set) 
+
+Логи (index + chunks) говорят храняться на S3. 
+Что тогда храниться локально? Ответ с форума: 
+"
+If you are using write-ahead log (WAL) on the ingester, the logs that’s in WAL will be lost if you don’t use persistent volume. You can try to do flush on shutdown, but I don’t have much experience with that I am not sure how reliable that is.
+
+Compactor writes marker file (the file that records which chunk files to delete according to retention), if you don’t use persistent volume for compactor compactor will miss deleting some chunks. This is not as big of a deal, you can always configure retention on your object storage as well and just delete files after your longest retention configured in Loki. Personally I am not using persistent volume for compactor either.
+"
+То есть, Ingester (который входит в группы write) хранить в persistent volume журнал WAL. Вроде как этот журнал можно отключить.
+Compactor (который входит в группу backend) записывает marker file (the file that records which chunk files to delete according to retention) и если мы не будем использовать persistent volume, то compactor will miss deleting some chunks.
+Наверное большого объема тогда для них и не нужно.
+
+results-cache не имеет persistent volume, потому что он хранит какой-то кеш в памяти (вот здесь вроде https://grafana.com/docs/loki/latest/get-started/components/#log-queries). Почему он запускается только одной репликой непонятно. Но подозреваю что он не очень то важен. Если упадёт, будет просто медленее работать, так как ответы на запросы не будут выдаваться из кеша.

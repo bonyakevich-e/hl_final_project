@@ -24,9 +24,3 @@
         update_repo_cache: true
         values_files:
           - /vagrant/kubernetes/values-prometheus.yaml
-#    - name: Add Loki help repo
-#      tags: add loki repo
-#      kubernetes.core.helm_repository:
-#        name: grafana
-#        repo_url: "https://grafana.github.io/helm-charts"
-#      ignore_errors: true

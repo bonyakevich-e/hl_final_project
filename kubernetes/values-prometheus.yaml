@@ -601,7 +601,9 @@ alertmanager:
     # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
     ingressClassName: nginx
 
-    annotations: {}
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: "cookie"
+      nginx.ingress.kubernetes.io/session-cookie-change-on-failure: "true"
 
     labels: {}
 
@@ -1392,7 +1394,16 @@ grafana:
 
   ## Configure additional grafana datasources (passed through tpl)
   ## ref: https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
-  additionalDataSources: []
+  additionalDataSources:
+    - name: Loki
+      type: loki
+      access: proxy
+      orgId: 1
+      url: http://loki-gateway.monitoring.svc.cluster.local:80
+      basicAuth: false
+      isDefault: false
+      version: 1
+      editable: false
   # - name: prometheus-sample
   #   access: proxy
   #   basicAuth: true
@@ -3654,7 +3665,9 @@ prometheus:
     # ingressClassName: nginx
     ingressClassName: nginx
 
-    annotations: {}
+    annotations:
+      nginx.ingress.kubernetes.io/affinity: "cookie"
+      nginx.ingress.kubernetes.io/session-cookie-change-on-failure: "true"
     labels: {}
 
     ## Redirect ingress to an additional defined port on the service

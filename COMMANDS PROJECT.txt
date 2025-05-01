@@ -1,3 +1,10 @@
 helm upgrade --reuse-values -n monitoring -f /vagrant/kubernetes/values-prometheus.yaml kube-prometheus-stack /vagrant/kube-prometheus-stack
 helm install -n monitoring -f /vagrant/kubernetes/values-prometheus.yaml kube-prometheus-stack /vagrant/kube-prometheus-stack
 helm uninstall kube-prometheus-stack -n monitoring
+helm show values grafana/loki-stack > /vagrant/kubernetes/values-loki-stack.yaml
+
+kubectl -n kubernetes-dashboard port-forward svc/kubernetes-dashboard-kong-proxy 8443:443 --address=0.0.0.0
+
+dnsutils:
+kubectl apply -f /vagrant/kubernetes/manifests/dnsutils.yaml - поднять dnsutils (дополнительно кидаем его в нужный namespace)
+kubectl exec -i -t dnsutils -- nslookup kubernetes.default - выполнить dns lookup
