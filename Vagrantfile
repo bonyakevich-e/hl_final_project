@@ -9,17 +9,17 @@ Vagrant.configure("2") do |config|
          v.cpus = 1 
       end  
 
-#   config.vm.define "haproxy-ext-1" do |haproxyext1|
-#      haproxyext1.vm.host_name = "haproxy-ext-1"
-#      haproxyext1.vm.network "public_network", ip: "192.168.30.131", bridge: "eno1"
-#      haproxyext1.vm.network "private_network", ip: "192.168.56.10"
-#   end      
+   config.vm.define "haproxy-ext-1" do |haproxyext1|
+      haproxyext1.vm.host_name = "haproxy-ext-1"
+      haproxyext1.vm.network "public_network", ip: "192.168.30.131", bridge: "eno1"
+      haproxyext1.vm.network "private_network", ip: "192.168.56.10"
+   end      
 
-#   config.vm.define "haproxy-ext-2" do |haproxyext2|
-#      haproxyext2.vm.host_name = "haproxy-ext-2"
-#      haproxyext2.vm.network "public_network", ip: "192.168.30.132", bridge: "eno1"
-#      haproxyext2.vm.network "private_network", ip: "192.168.56.11"
-#   end
+   config.vm.define "haproxy-ext-2" do |haproxyext2|
+      haproxyext2.vm.host_name = "haproxy-ext-2"
+      haproxyext2.vm.network "public_network", ip: "192.168.30.132", bridge: "eno1"
+      haproxyext2.vm.network "private_network", ip: "192.168.56.11"
+   end
 
    config.vm.define "haproxy-int-1" do |haproxyint1|
       haproxyint1.vm.host_name = "haproxy-int-1"

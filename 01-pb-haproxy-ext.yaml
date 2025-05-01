@@ -69,6 +69,18 @@
     - name: Turning "set-ntp" on
       command: /usr/bin/timedatectl set-ntp on
 
+    - name: include vars
+      ansible.builtin.include_vars:
+        file: templates/haproxy-ext/baltbereg_com.pem.yaml
+
+    - name: install SSL key
+      ansible.builtin.copy:
+        content: "{{ ssl_certificate }}"
+        dest: "/etc/ssl/private/baltbereg.com.pem"
+        owner: root
+        group: root
+        mode: "u=rw,g=r,o="
+
   handlers:
     - name: netplan apply
       command: netplan apply
