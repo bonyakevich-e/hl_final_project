@@ -9,7 +9,7 @@
    * :newspaper_roll: [Схема взаимодействия компонентов веб-сервиса](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%8F-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B0)
 3. :books: [Описание компонентов проекта:](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#3-books-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
    * :books: [Обзор архитектуры проекта](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%BE%D0%B1%D0%B7%D0%BE%D1%80-%D0%B0%D1%80%D1%85%D0%B8%D1%82%D0%B5%D0%BA%D1%82%D1%83%D1%80%D1%8B-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
-   * :books: Внешний и внутренний reverse прокси сервера HAProxy
+   * :books: [Внешний и внутренний reverse прокси сервера HAProxy](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9-reverse-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-haproxy)
    * :books: Платформа контейнеризации Kubernetes
    * :books: Веб-сервис Nextcloud
    * :books: Система управления базами данных PostgreSQL
@@ -79,7 +79,7 @@ __Задачи проектной работы:__
 - `node-1`, `node-2`, `node-3` - виртуальные машины под Kubernetes worker plane
 - `database-1`, `database-2`, `database-3` - виртуальные машины под кластер базы данных
 
-  * #### :books: [Внешний и внутренний reverse прокси сервера HAProxy](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9-reverse-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-haproxy)
+  * #### :books: Внешний и внутренний reverse прокси сервера HAProxy
 Как было сказано ранее, внешний reverse прокси разделяет доверенную (trust) и недоверенную (untrust) зоны. Для доступа к веб-сервису Nextcloud клиенты из untrust зоны обращаются по протоколу http/https на внешний виртуальный адрес сервера, HAProxy выполняет http->https redirect при необходимости, SSL termination и отправляет запрос на внутренний прокси сервер через свой внутренний интерфейс. Так же на данном сервере настроен фаервол iptables для ограничения трафика между untrust и trust zones.   
 
 Внутренний прокси сервера получает http запрос от клиентов на внутренний виртуальный ip адрес и перенаправляет в кластер Kubernetes на Ingress Controller (ingress-nginx). Также внутренний прокси сервер является балансировщиком для кластера Kubernetes и СУБД PostgreSQL. 
