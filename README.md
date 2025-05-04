@@ -1,5 +1,40 @@
-# hl_final_project
-OTUS High Load Final Project: Subject: Реализация отказоустойчивого кластера веб-приложения Nextcloud
+### :black_nib: ПРОЕКТНАЯ РАБОТА: "Реализация отказоустойчивого веб-сервиса c использованием платформы оркестрации контейнеризированных приложений Kubernetes"
+---------------------
+#### СОДЕРЖАНИЕ:
+1. :clipboard: [Введение](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#1-clipboard-%D0%B2%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5)
+2. :newspaper_roll: [Схемы проекта:](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#2-newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D1%8B-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
+   * :pencil2: [Структурная схема](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#pencil2-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0)
+   * :pencil2: [Схема кластера Kubernetes](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#pencil2-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0)
+   * :pencil2: [Схема системы хранения данных](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#pencil2-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0)
+   * :pencil2: [Схема взаимодействия компонентов веб-сервиса](https://github.com/bonyakevich-e/hl_final_project/edit/main/README.md#pencil2-%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%BD%D0%B0%D1%8F-%D1%81%D1%85%D0%B5%D0%BC%D0%B0)
+3. Что-то еще
+
+--------------------
+### 1. :clipboard: Введение
+
+--------------------
+### 2. :newspaper_roll: Схемы проекта
+
+  * #### :pencil2: Структурная схема:
+
+![схема общая-структурная](https://github.com/user-attachments/assets/3e26227e-3763-4240-a024-381c61f1877a)
+
+
+  * #### :pencil2: Схема кластера Kubernetes:
+
+![схема общая-kubernetes cluster](https://github.com/user-attachments/assets/5d64eaa7-6c68-4b7a-8ffa-4e9db6155ca3)
+
+
+  * #### :pencil2: Схема системы хранения данных
+
+![схема общая-persistent storage](https://github.com/user-attachments/assets/7fdb7ac2-0c78-4589-b6c4-0ee596eeba74)
+
+  * #### :pencil2: Схема взаимодействия компонентов веб-сервиса
+
+![схема общая-pods](https://github.com/user-attachments/assets/90787a20-28a9-4fdf-8679-0a95ca572c80)
+
+
+
 
 В качестве системы мониторинга используется kube-prometheus-stack (Prometheus, Alertmanager, Grafana). 
 Высокая доступность для Prometheus достингается за счёт запуска двух Statefull приложений, который работают отдельно друг от друга. Каждый из них снимает одни и те же метрики. Между собой они ничего не синхронят. Соответственно могут быть небольшая разница в показаниях. Чтобы это решить можно использовать Thanos, но я не использовал. (https://prometheus-operator.dev/docs/platform/high-availability/)
