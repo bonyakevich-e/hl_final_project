@@ -79,7 +79,7 @@ __Задачи проектной работы:__
 - `node-1`, `node-2`, `node-3` - виртуальные машины под Kubernetes worker plane
 - `database-1`, `database-2`, `database-3` - виртуальные машины под кластер базы данных
 
-  * #### Внешний и внутренний reverse прокси сервера HAProxy
+  * #### :books: [Внешний и внутренний reverse прокси сервера HAProxy](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9-reverse-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-haproxy)
 Как было сказано ранее, внешний reverse прокси разделяет доверенную (trust) и недоверенную (untrust) зоны. Для доступа к веб-сервису Nextcloud клиенты из untrust зоны обращаются по протоколу http/https на внешний виртуальный адрес сервера, HAProxy выполняет http->https redirect при необходимости, SSL termination и отправляет запрос на внутренний прокси сервер через свой внутренний интерфейс. Так же на данном сервере настроен фаервол iptables для ограничения трафика между untrust и trust zones.   
 
 Внутренний прокси сервера получает http запрос от клиентов на внутренний виртуальный ip адрес и перенаправляет в кластер Kubernetes на Ingress Controller (ingress-nginx). Также внутренний прокси сервер является балансировщиком для кластера Kubernetes и СУБД PostgreSQL. 
