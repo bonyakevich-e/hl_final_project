@@ -14,7 +14,7 @@
    * :books: [Веб-сервис Nextcloud](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-nextcloud)
    * :books: [Система управления базами данных PostgreSQL](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0%D0%BC%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-postgresql)
    * :books: [Система мониторинга Prometheus Grafana AlertManager](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-prometheus-grafana-alertmanager)
-   * :books: Система централизованного сбора логов Grafana Loki
+   * :books: [Система централизованного сбора логов Grafana Loki](https://github.com/bonyakevich-e/hl_final_project/blob/main/README.md#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D1%86%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%B1%D0%BE%D1%80%D0%B0-%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2-grafana-loki)
 
 --------------------
 
