@@ -22,7 +22,7 @@
 
   * #### :pencil2: Схема кластера Kubernetes:
 
-![схема общая-kubernetes cluster](https://github.com/user-attachments/assets/5d64eaa7-6c68-4b7a-8ffa-4e9db6155ca3)
+![схема общая-kubernetes cluster](https://github.com/user-attachments/assets/b75916e2-8aad-4f83-ab24-c6c305847637)
 
 
   * #### :pencil2: Схема системы хранения данных
