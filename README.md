@@ -15,7 +15,7 @@
    * :books: [Система управления базами данных PostgreSQL](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0%D0%BC%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-postgresql)
    * :books: [Система мониторинга Prometheus Grafana AlertManager](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-prometheus-grafana-alertmanager)
    * :books: [Система централизованного сбора логов Grafana Loki](https://github.com/bonyakevich-e/hl_final_project/blob/main/README.md#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D1%86%D0%B5%D0%BD%D1%82%D1%80%D0%B0%D0%BB%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE-%D1%81%D0%B1%D0%BE%D1%80%D0%B0-%D0%BB%D0%BE%D0%B3%D0%BE%D0%B2-grafana-loki)
-4. :gear: Установка и настройка компонентов проектной работы
+4. :gear: [Установка и настройка компонентов проектной работы](https://github.com/bonyakevich-e/hl_final_project/blob/main/README.md#gear-%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%BD%D0%BE%D0%B9-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B)
 --------------------
 
 ### 1. :clipboard: Введение
@@ -130,4 +130,11 @@ __Loki__ развёртывается в режиме [Simple Scalable](https://
 
 #### :gear: Установка и настройка компонентов проектной работы
 
-Для установки компонентов проектной работы нужно подготовить виртуальные машины, указаные в файле __Vagrantfile__ в данном репозитории. После этого необходимо поочерёдно запустить Ansible-playbook'и `01-pb-haproxy-ext.yaml`, `02-pb-haproxy-int.yaml`, `03-pb-setup-kuber.yaml`, `04-pb-postgresql.yaml`, `05-pb-deploy-nextcloud.yaml`, `06-pb-monitoring.yaml`, `07-pb-logs.yaml`. При необходимости, изменить ip адресацию в данных файлах. 
+Для установки компонентов проектной работы нужно подготовить виртуальные машины, указаные в файле __Vagrantfile__ в данном репозитории. После этого необходимо поочерёдно запустить Ansible-playbook'и `01-pb-haproxy-ext.yaml`, `02-pb-haproxy-int.yaml`, `03-pb-setup-kuber.yaml`, `04-pb-postgresql.yaml`, `05-pb-deploy-nextcloud.yaml`, `06-pb-monitoring.yaml`, `07-pb-logs.yaml`. При необходимости, изменить ip адресацию в данных файлах, доменные имена, добавить ssl сертификат. 
+
+------------------------------------
+:cactus:
+
+:white_check_mark: выполнено в рамках курса __"Инфраструктура высоконагруженных систем"__ учебного центра __OTUS__, :student: __Евгений Бонякевич__, :date: 2025
+
+:cactus:
