@@ -119,7 +119,7 @@ Alertmanager используется для отправки в Telegram уве
 
 #### :books: Система централизованного сбора логов Grafana Loki
 
-Для сбора и хранения логов используется стек __Loki__, __Grafana__, __Alloy__ (https://grafana.com/docs/loki/latest/send-data/k8s-monitoring-helm/). 
+Для сбора и хранения логов используется стек __Loki__, __Grafana__, __Alloy__. 
 __Loki__ развёртывается в режиме [Simple Scalable](https://grafana.com/docs/loki/latest/get-started/deployment-modes/#simple-scalable) mode c помощью helm-чарта [grafana/loki](https://artifacthub.io/packages/helm/grafana/loki), чем достигается его высокая доступность. В своей работе Loki использует объектное хранилище для хранения логов. В данном проекте используется __S3__ хранилище от __Yandex Cloud__. Также некоторые компоненты Loki (Ingester, Compactor) требуют Persistent Volume для хранения служебных данных (используется Longhorn, описанные выше). 
 
 Для доставки логов в Loki используется агент(клиент) __Alloy__. Данный агент запускается в режиме DaemonSet, собирает логи с кластера Kubernetes и подов, и отправляет их в Loki HTTP API. Для развёртывания Alloy используется helm-чарт [k8s-monitoring-alloy-logs](https://artifacthub.io/packages/helm/grafana/k8s-monitoring).
