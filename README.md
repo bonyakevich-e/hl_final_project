@@ -13,7 +13,7 @@
    * :books: [Платформа контейнеризации Kubernetes](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B0-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%B9%D0%BD%D0%B5%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-kubernetes)
    * :books: [Веб-сервис Nextcloud](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-nextcloud)
    * :books: [Система управления базами данных PostgreSQL](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B1%D0%B0%D0%B7%D0%B0%D0%BC%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-postgresql)
-   * :books: Система мониторинга Prometheus Grafana AlertManager
+   * :books: [Система мониторинга Prometheus Grafana AlertManager](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0-%D0%BC%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80%D0%B8%D0%BD%D0%B3%D0%B0-prometheus-grafana-alertmanager)
    * :books: Система централизованного сбора логов Grafana Loki
 
 --------------------
@@ -108,14 +108,14 @@ Nextcloud разворачивается в Kubernetes с помощью helm-ч
 
 #### :books: Система мониторинга Prometheus Grafana AlertManager
 
-Для мониторинга работоспособности сервисов используется стек приложений Prometheus, Alertmanager, Grafana. Разворачивается данный стек в Kubernetes с помощью helm-чарта [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack).
+Для мониторинга работоспособности сервисов используется стек приложений __Prometheus__, __Alertmanager__, __Grafana__. Разворачивается данный стек в Kubernetes с помощью helm-чарта [kube-prometheus-stack](https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack).
 
-Высокая доступность для Prometheus достигается за счёт запуска двух Statefull приложений, который работают отдельно друг от друга. Каждый из них снимает одни и те же метрики. Между собой они не синхронизируются, соответственно может быть небольшая разница в показаниях. Для решения этой проблемы можно использовать [Thanos](https://prometheus-operator.dev/docs/platform/high-availability/). В данном проекте Thanos не используется.
+Высокая доступность для __Prometheus__ достигается за счёт запуска двух Statefull приложений, который работают отдельно друг от друга. Каждый из них снимает одни и те же метрики. Между собой они не синхронизируются, соответственно может быть небольшая разница в показаниях. Для решения этой проблемы можно использовать [Thanos](https://prometheus-operator.dev/docs/platform/high-availability/). В данном проекте Thanos не используется.
 
-Alertmanager собирает полноценный кластер из двух нод. Для этого в [values указываем количество реплик](https://prometheus.io/docs/alerting/latest/alertmanager/#high-availability)
+__Alertmanager__ собирает полноценный кластер из двух нод. Для этого в [values указываем количество реплик](https://prometheus.io/docs/alerting/latest/alertmanager/#high-availability)
 Alertmanager используется для отправки в Telegram уведомлений о событиях.
 
-Для отображения собранных метрик используется Grafana. Для того чтобы Grafana могла работать в режиме высокой доступности, нужно использовать внешнюю (external) базу данных. В данном проекте используется кластер баз данных PosgreSQL, описанный выше. 
+Для отображения собранных метрик используется __Grafana__. Для того чтобы Grafana могла работать в режиме высокой доступности, нужно использовать внешнюю (external) базу данных. В данном проекте используется кластер баз данных PosgreSQL, описанный выше. Grafana запускается в режиме Stateless в двух экземплярах.
 
 
 Для сбора и хранения логов используется стек Loki, Grafana, Alloy (https://grafana.com/docs/loki/latest/send-data/k8s-monitoring-helm/). 
