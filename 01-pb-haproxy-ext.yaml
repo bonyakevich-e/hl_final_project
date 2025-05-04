@@ -92,6 +92,20 @@
   hosts: haproxy-ext
   become: true
   tasks:
+    - name: install iptables-persistent
+      tags: install iptables-persistent
+      ansible.builtin.apt:
+        name: iptables-persistent
+        state: present
+        update_cache: true
+
+    - name: import iptables rules
+      tags: import iptables rules
+      ansible.builtin.template:
+        src: templates/haproxy-ext/rules.v4
+        dest: /etc/iptables/rules.v4
+      notify: restore iptables rules
+
     - name: Install haproxy
       tags: install haproxy
       ansible.builtin.apt:
@@ -121,6 +135,11 @@
       notify: restart keepalived
 
   handlers:
+    - name: restore iptables rules
+      community.general.iptables_state:
+        state: restored
+        path: /etc/iptables/rules.v4
+
     - name: restart haproxy
       ansible.builtin.service:
         name: haproxy

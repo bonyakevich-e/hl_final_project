@@ -1,0 +1,16 @@
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [439:110230]
+-A INPUT -i eth1 -p vrrp -j ACCEPT
+-A INPUT -d 224.0.0.0/8 -i eth1 -j ACCEPT
+-A INPUT -i eth1 -p tcp -m tcp --dport 80 -j ACCEPT
+-A INPUT -i eth1 -p tcp -m tcp --dport 443 -j ACCEPT
+-A INPUT -i eth0 -j ACCEPT
+-A INPUT -i eth2 -j ACCEPT
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
