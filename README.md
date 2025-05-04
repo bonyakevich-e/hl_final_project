@@ -11,7 +11,7 @@
    * :books: [Обзор архитектуры проекта](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%BE%D0%B1%D0%B7%D0%BE%D1%80-%D0%B0%D1%80%D1%85%D0%B8%D1%82%D0%B5%D0%BA%D1%82%D1%83%D1%80%D1%8B-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
    * :books: [Внешний и внутренний reverse прокси сервера HAProxy](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9-reverse-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-haproxy)
    * :books: [Платформа контейнеризации Kubernetes](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%BF%D0%BB%D0%B0%D1%82%D1%84%D0%BE%D1%80%D0%BC%D0%B0-%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%B9%D0%BD%D0%B5%D1%80%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-kubernetes)
-   * :books: Веб-сервис Nextcloud
+   * :books: [Веб-сервис Nextcloud](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81-nextcloud)
    * :books: Система управления базами данных PostgreSQL
    * :books: Система мониторинга Prometheus Grafana AlertManager
    * :books: Система централизованного сбора логов Grafana Loki
@@ -98,7 +98,7 @@ __Nextcloud__ - облачный сервис хранения данных с �
 
 Для публикации Nextcloud используется Ingress (ingress-nginx), на котором настроен sticky session (session affinity). 
 
-[Схема взаимодействия компонентов веб-сервиса] (https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%8F-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B0) представлена выше.
+[Схема взаимодействия компонентов веб-сервиса](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%8F-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B0) представлена выше.
 
 
 
