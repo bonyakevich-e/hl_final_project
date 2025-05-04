@@ -31,7 +31,8 @@
 
   * #### :pencil2: Схема взаимодействия компонентов веб-сервиса
 
-![схема общая-pods](https://github.com/user-attachments/assets/90787a20-28a9-4fdf-8679-0a95ca572c80)
+![схема общая-pods](https://github.com/user-attachments/assets/a232a6e7-bf45-4005-817b-dea1e82f037e)
+
 
 
 
