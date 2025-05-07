@@ -1,0 +1,35 @@
+patronictl -c /etc/patroni/patroni.yml list - состояние postregsql кластера
+patronictl -c /etc/patroni/patroni.yml reinit postgres <node-name> - рециинилизация ноды (если наблюдается "Lag in MB" >0 или unknown в статусе кластера и не только)
+patronictl -c /etc/patroni/patroni.yml failover postgres --candidate <node-name> - ручной фейловер
+
+ETCDCTL_API=3 etcdctl -w table --endpoints=192.168.56.51:2379,192.168.56.52:2379,192.168.56.53:2379 endpoint status - состояние etcd кластера
+
+После установки postgresql он автоматически запускается. Нам это не нужно, потому что запуском и настройкой postersql будет заниматься patroni. Поэтому мы 
+деактивируем postgresql и удаляем файлы, которые он создал при первом запуске. А после настраиваем и поднимаем patroni (см. плейбук)
+
+проверить подключение к БД через haproxy из backendа:
+psql -Upostgres -h192.168.56.20 -p5000 -t -c "select inet_server_addr()"
+
+удалить базу и пользователя nextcloud:
+DROP database nextcloud;
+DROP OWNED by nextcloud;
+DROP USER nextcloud;
+
+удаленное подключение к postgre:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000
+
+удаленный запуск команд с .sql файла:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000 < nextcloud.sql
+
+удаленный запуск команд:
+PGPASSWORD=OtusHL psql -Upostgres -hlocalhost -p5000 -c "DROP DATABASE nextcloud"
+
+Статус streaming: "If it's streaming, then it's receiving WALs through a replication connection, what is normal"
+
+Посмотреть на которую ноду haproxy отправляет запросы можно в UI Haproxy: http://192.168.56.20:9000/stats admin/admin
+
+По умолчанию patroni настраивает PostgreSQL на асинхронную репликацию. По хорошему, если не нужны большая производительность, лучше делать одну синхронную
+реплику и одну асинхронную.
+
+У меня etcd на тех же хостах что и PostgreSQL. Это неправильно и в прод так нельзя. Потому что если будет сильная нагрузка на базу, начнётся конкуренция, etcd 
+её проиграет и стопнется, базы данных перейдут в режим ReadOnly.
