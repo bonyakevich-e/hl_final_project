@@ -7,7 +7,7 @@
    * :newspaper_roll: [Схема кластера Kubernetes](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80%D0%B0-kubernetes)
    * :newspaper_roll: [Схема системы хранения данных](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D1%8B-%D1%85%D1%80%D0%B0%D0%BD%D0%B5%D0%BD%D0%B8%D1%8F-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85)
    * :newspaper_roll: [Схема взаимодействия компонентов веб-сервиса](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B4%D0%B5%D0%B9%D1%81%D1%82%D0%B2%D0%B8%D1%8F-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%B2%D0%B5%D0%B1-%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B0)
-   * :newspaper_roll: Схема кластера СУБД PostgeSQL
+   * :newspaper_roll: [Схема кластера СУБД PostgeSQL](https://github.com/bonyakevich-e/hl_final_project/blob/main/README.md#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80%D0%B0-%D1%81%D1%83%D0%B1%D0%B4-postgesql)
 3. :books: [Описание компонентов проекта:](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#3-books-%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%BE%D0%BC%D0%BF%D0%BE%D0%BD%D0%B5%D0%BD%D1%82%D0%BE%D0%B2-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
    * :books: [Обзор архитектуры проекта](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%BE%D0%B1%D0%B7%D0%BE%D1%80-%D0%B0%D1%80%D1%85%D0%B8%D1%82%D0%B5%D0%BA%D1%82%D1%83%D1%80%D1%8B-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
    * :books: [Внешний и внутренний reverse прокси сервера HAProxy](https://github.com/bonyakevich-e/hl_final_project/tree/main?tab=readme-ov-file#books-%D0%B2%D0%BD%D0%B5%D1%88%D0%BD%D0%B8%D0%B9-%D0%B8-%D0%B2%D0%BD%D1%83%D1%82%D1%80%D0%B5%D0%BD%D0%BD%D0%B8%D0%B9-reverse-%D0%BF%D1%80%D0%BE%D0%BA%D1%81%D0%B8-%D1%81%D0%B5%D1%80%D0%B2%D0%B5%D1%80%D0%B0-haproxy)
@@ -112,6 +112,12 @@ Nextcloud разворачивается в Kubernetes с помощью helm-ч
 #### :books: Система управления базами данных PostgreSQL
 
 Веб-сервис Nextcloud хранит свои настройки в базе данных. В проекте используется кластер СУБД PostgreSQL. Для реализации высокой доступности используется приложение __Patroni__. Кластер состоит из трёх виртуальных машин. В единицу времени один из серверов является Leader, два других - Replica. Проксированием запросов на Leader/Replica занимается внутренний прокси сервер HAProxy. 
+
+[Схема кластера СУБД PostgeSQL](https://github.com/bonyakevich-e/hl_final_project/blob/main/README.md#newspaper_roll-%D1%81%D1%85%D0%B5%D0%BC%D0%B0-%D0%BA%D0%BB%D0%B0%D1%81%D1%82%D0%B5%D1%80%D0%B0-%D1%81%D1%83%D0%B1%D0%B4-postgesql)
+
+Синхронизация выполняется в Asynchronous mode на обе реплики. Это повышает скорость работы баз данных, но в случае сбоя может произойти потеря данных. Если упор делается на сохранность данных, то лучшим вариантом будет - одна реплика синхронная, вторая асинхронная. 
+
+В данном проекте etcd расположен на тех же машинах что и СУБД. В продакшн не стоит так делать, нужно поднимать отдельный кластер etcd. Потому что при высоких нагрузка на БД начнётся конкуренция за ресурсы сервера. Если etcd кластер перестанет отвечать на запросы, PostgeSQL переключится в режим Read Only.
 
 #### :books: Система мониторинга Prometheus Grafana AlertManager
 
