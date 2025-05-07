@@ -56,7 +56,8 @@ __Задачи проектной работы:__
 
   * #### :newspaper_roll: Схема кластера СУБД PostgeSQL
 
-![схема общая-database-70p](https://github.com/user-attachments/assets/4dd5d61f-2117-4512-be39-97f36bbebc9f)
+![схема общая-database](https://github.com/user-attachments/assets/fd2f4ee3-e1ae-45fc-ac12-482d7154b648)
+
 
 
 -------------------
