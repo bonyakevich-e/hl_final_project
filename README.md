@@ -48,7 +48,7 @@ __Задачи проектной работы:__
 
   * #### :newspaper_roll: Схема системы хранения данных
 
-![схема общая-persistent storage](https://github.com/user-attachments/assets/7fdb7ac2-0c78-4589-b6c4-0ee596eeba74)
+![схема общая-persistent storage](https://github.com/user-attachments/assets/7fc0cc87-7151-4814-b2ca-f68a04a63b05)
 
   * #### :newspaper_roll: Схема взаимодействия компонентов веб-сервиса
 
