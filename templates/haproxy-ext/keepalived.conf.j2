@@ -10,7 +10,7 @@ vrrp_instance VI_1 {
     priority 100                # Higher priority on the primary server
 {% elif inventory_hostname == "haproxy-ext-2" %}
     state BACKUP
-    priority 50                 # Higher priority on the primary server   
+    priority 99                 # Higher priority on the primary server   
 {% endif %} 
     interface eth1                 # Network interface to bind to
     virtual_router_id 1                 

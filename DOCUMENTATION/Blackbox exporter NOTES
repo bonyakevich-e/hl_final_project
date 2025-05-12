@@ -1,0 +1,11 @@
+При деплое blackbox exporter в Kubernetes не работоет icmp если не установить в values: 
+
+podSecurityContext:
+  sysctls:
+    - name: net.ipv4.ping_group_range
+      value: "0 65536"
+
+Это какой-то баг при развёртывании в Kubernetes:
+https://github.com/prometheus-community/helm-charts/issues/2360
+https://github.com/prometheus-community/helm-charts/pull/3616
+https://github.com/prometheus-community/helm-charts/issues/2483

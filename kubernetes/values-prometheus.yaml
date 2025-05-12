@@ -301,8 +301,15 @@ defaultRules:
     # fsSelector: 'fstype=~"ext[234]|btrfs|xfs|zfs"'
 
   ## Disabled PrometheusRule alerts
-  disabled: {}
-  # KubeAPIDown: true
+  disabled:
+    NodeClockNotSynchronising: true
+    etcdMembersDown: true
+    TargetDown: true
+    etcdInsufficientMembers: true
+    KubeSchedulerDown: true
+    KubeControllerManagerDown: true
+    KubeProxyDown: true
+  #  KubeAPIDown: true
   # NodeRAIDDegraded: true
 
 ## Deprecated way to provide custom recording or alerting rules to be deployed into the cluster.
@@ -317,14 +324,125 @@ defaultRules:
 
 ## Provide custom recording or alerting rules to be deployed into the cluster.
 ##
-additionalPrometheusRulesMap: {}
-#  rule-name:
-#    groups:
-#    - name: my_group
-#      rules:
-#      - record: my_record
-#        expr: 100 * my_record
-
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+      - name: haproxy-int
+        rules:
+          - alert: HaproxyServerHealthcheckFailure
+            expr: increase(haproxy_server_check_failures_total[1m]) > 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: HAProxy server healthcheck failure (instance {{ $labels.instance }})
+              description: "Some server healthcheck are failing on {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      - name: ping
+        rules:
+          - alert: PingFailureHaproxyInt1
+            expr: probe_success{instance="192.168.56.21", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureHaproxyInt2
+            expr: probe_success{instance="192.168.56.22", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureHaproxyExt1
+            expr: probe_success{instance="192.168.56.10", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureHaproxyExt2
+            expr: probe_success{instance="192.168.56.11", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureControl1
+            expr: probe_success{instance="192.168.56.31", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureControl2
+            expr: probe_success{instance="192.168.56.32", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureControl3
+            expr: probe_success{instance="192.168.56.33", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureNode1
+            expr: probe_success{instance="192.168.56.41", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureNode2
+            expr: probe_success{instance="192.168.56.42", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureNode3
+            expr: probe_success{instance="192.168.56.43", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureDatabase1
+            expr: probe_success{instance="192.168.56.51", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureDatabase2
+            expr: probe_success{instance="192.168.56.52", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+          - alert: PingFailureDatabase3
+            expr: probe_success{instance="192.168.56.53", job="ICMP"} == 0
+            for: 5s
+            labels:
+              severity: warning
+            annotations:
+              summary: ICMP ping server failure (instance {{ $labels.instance }})
+              description: "Some server is unavailable by icmp ping {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ##
 global:
   rbac:
@@ -531,10 +649,10 @@ alertmanager:
       - target_matchers:
           - "alertname = InfoInhibitor"
     route:
-      group_by: ["namespace"]
+      group_by: ["alertname"]
       group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 1h
+      group_interval: 1m
+      repeat_interval: 2m
       receiver: "telegram"
       routes:
         - receiver: "null"
@@ -545,7 +663,7 @@ alertmanager:
       - name: "telegram"
         telegram_configs:
           - bot_token: "5358481309:AAEqnsl8wjr62g2hUDo72R4qZxhTlEFe8pM"
-            chat_id: -4553957601
+            chat_id: -4654340448
     templates:
       - "/etc/alertmanager/config/*.tmpl"
 
@@ -4315,7 +4433,42 @@ prometheus:
     ## The scrape configuration example below will find master nodes, provided they have the name .*mst.*, relabel the
     ## port to 2379 and allow etcd scraping provided it is running on all Kubernetes master nodes
     ##
-    additionalScrapeConfigs: []
+    additionalScrapeConfigs:
+      - job_name: "haproxy-int-metrics"
+        static_configs:
+          - targets: ["192.168.56.20:8405"]
+      - job_name: "ICMP"
+        scrape_interval: 5s
+        metrics_path: /probe
+        params:
+          module: [icmp] #ping
+        static_configs:
+          - targets:
+              - "192.168.56.51"
+              - "192.168.56.52"
+              - "192.168.56.53"
+              - "192.168.56.10"
+              - "192.168.56.11"
+              - "192.168.56.21"
+              - "192.168.56.22"
+              - "192.168.56.31"
+              - "192.168.56.32"
+              - "192.168.56.33"
+              - "192.168.56.41"
+              - "192.168.56.42"
+              - "192.168.56.43"
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
+            replacement: prometheus-blackbox-exporter:9115
+    #    metric_relabel_configs:
+    #      - source_labels: [__name__]
+    #        regex: "haproxy_(process_|frontend_|listener_|backend_|server_check_status).*"
+    #        action: keep
+
     # - job_name: kube-etcd
     #   kubernetes_sd_configs:
     #     - role: node

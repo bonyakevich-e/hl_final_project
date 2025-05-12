@@ -207,3 +207,45 @@
         name: patroni
         state: started
         enabled: yes
+
+# ============================ setup blackbox exporter ===================
+
+- name: Setup Blackbox exporter
+  tags: setup blackbox exporter
+  hosts: databases
+  become: true
+  tasks:
+    - name: Get blackbox exporter
+      tags: get blackbox exporter
+      ansible.builtin.unarchive:
+        src: https://github.com/prometheus/blackbox_exporter/releases/download/v0.26.0/blackbox_exporter-0.26.0.linux-amd64.tar.gz
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Install blackbox binary
+      tags: install blackbox binary
+      ansible.builtin.copy:
+        src: /tmp/blackbox_exporter-0.26.0.linux-amd64/blackbox_exporter
+        dest: /usr/local/bin/
+        mode: "0755"
+        remote_src: yes
+
+    - name: Install blackbox config
+      tags: install blackbox config
+      ansible.builtin.copy:
+        src: /tmp/blackbox_exporter-0.26.0.linux-amd64/blackbox.yml
+        dest: /etc/
+        remote_src: yes
+
+    - name: Install blackbox service
+      tags: install blackbox service
+      ansible.builtin.copy:
+        src: templates/blackbox/blackbox_exporter.service
+        dest: /etc/systemd/system
+
+    - name: Start blackbox exporter
+      tags: start blackbox exporter
+      ansible.builtin.service:
+        name: blackbox_exporter
+        state: restarted
+        enabled: yes

@@ -1,0 +1,49 @@
+Чтобы добавить дополтельный scrape конфиг, указываем его в values в раздел additionalScrapeConfigs. После helm upgrade будет создан дополнительный
+Secret "kube-prometheus-stack-prometheus-scrape-confg". 
+
+Например, для мониторинга Haproxy.
+Добавляем в конфиг haproxy:
+frontend prometheus
+  bind *:8405
+  mode http
+  http-request use-service prometheus-exporter if { path /metrics }
+  no log
+
+Метрики будут доступны по ссылке http://192.168.56.20:8405/metrics
+
+В values в секцию additionalScrapeConfigs добавляем:
+
+      - job_name: "haproxy-int-metrics"
+        static_configs:
+          - targets: ["192.168.56.20:8405"]
+
+Делаем helm upgrade: 
+helm upgrade --reuse-values -n monitoring -f /vagrant/kubernetes/values-prometheus.yaml kube-prometheus-stack /vagrant/kube-prometheus-stack
+
+Смотрим что в конфиг прометея добавились нужные строчки (например через UI)
+Делаем тестовый запрос в прометее:
+haproxy_server_status
+Получаем статус серверов в бэкендах.
+
+Чтобы добавить алерт, нужно вписать его конфиг в values в секцию additionalPrometheusRulesMap. Например:
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+      - name: haproxy-int
+        rules:
+          - alert: HaproxyServerHealthcheckFailure
+            expr: increase(haproxy_server_check_failures_total[1m]) > 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: HAProxy server healthcheck failure (instance {{ $labels.instance }})
+              description: "Some server healthcheck are failing on {{ $labels.server }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+
+
+==========================================
+
+Т.к. все собираемые метрики и алерты в обоих Prometheus идентичны, то в случае каких-то проблем, алерты всплывут на каждом из них, 
+и каждый передаст их в свой Alertmanager. Чтобы получателям не приходило двойных нотификаций об алертах, 
+Alertmanager объединены в кластер. Кластер Alertmanager делает дедублекацию алертов, поэтому пользователи получают их один раз.

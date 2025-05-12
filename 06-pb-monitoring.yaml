@@ -24,3 +24,14 @@
         update_repo_cache: true
         values_files:
           - /vagrant/kubernetes/values-prometheus.yaml
+
+    - name: Deploy Prometheus Blackbox Exporter
+      tags: deploy blackbox
+      kubernetes.core.helm:
+        name: prometheus-blackbox-exporter
+        chart_ref: prometheus-community/prometheus-blackbox-exporter
+        release_namespace: monitoring
+        create_namespace: true
+        update_repo_cache: true
+        values_files:
+          - /vagrant/kubernetes/values-blackbox-exporter.yaml
