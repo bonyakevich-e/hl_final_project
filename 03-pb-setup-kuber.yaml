@@ -523,3 +523,14 @@
     - name: Create ingress rule for longhorn ui
       tags: ingress-longhorn-web
       command: kubectl apply -f /vagrant/kubernetes/manifests/ingress-longhorn.yaml
+
+# ====================================
+
+- name: Install Metric Server
+  tags: install metric server
+  hosts: control-1
+  become: true
+  tasks:
+    - name: Setup Metric Server
+      tags: setup metric server
+      command: kubectl apply -f /vagrant/kubernetes/manifests/kube-metric-server.yaml
